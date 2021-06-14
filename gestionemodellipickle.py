@@ -1,4 +1,5 @@
 #CATALOGAZIONE MODELLI STAMPANTE 3D
+import pickle
 
 #Creo la classe modello 3d
 class Modello():    
@@ -17,16 +18,16 @@ class Modello():
             self.descrizione = newdescrizione
 
     def stampa(self):
-        print("|- Nome: %s \n|- Descrizione: %s \n"%(self.nome, self.descrizione))
+        print(" MODELLO\nNome: %s \t  Descrizione: %s \n"%(self.nome, self.descrizione))
 
 
-#Creo la classe dipartimento
+
 class Dipartimento():
 
     def __init__(self, nome):
         self.nome = nome
         self.listaModelli = []
-
+        self.file = nome+".p"
 
     def inserimento(self, modello):
         self.listaModelli.append(modello)
@@ -41,6 +42,7 @@ class Dipartimento():
             if modello.nome == nome:
                 print("------Modello trovato------")
                 modello.stampa()
+                return modello      #questo serve per poter modificare quando si caricano i modelli da file
     
     
     def stampaModelli(self):
@@ -48,9 +50,22 @@ class Dipartimento():
         for modello in self.listaModelli:
             modello.stampa()
 
+    #carico i dati dal file nella lista
+    def leggi(self):
+        with open(self.file, 'rb') as file:
+            self.listaModelli = pickle.load(file)
+            print("Caricamento effettuato!")
+
+    #salvo i dati della lista nel file
+    def salva(self):
+        with open(self.file, 'wb') as file:
+            pickle.dump(self.listaModelli, file)
+            print("Salvataggio effettuato!")
 
 
 
+#creazione oggetti e salvataggio file
+'''
 #Creo due modelli
 myModello = Modello("Tappo","Tappo di bottiglia in plastica")
 myModello2 = Modello("Quadrato","Un semplice quadrato per qualsiasi uso!")
@@ -78,3 +93,15 @@ myDipartimento.cancellazione(myModello)
 #controllo la lista per vedere se ha eliminato il modello
 myDipartimento.stampaModelli()
 
+myDipartimento.salva()
+'''
+
+#creazione oggetto e caricamento da file
+
+myDipartimento = Dipartimento("Dipartimento 1")
+myDipartimento.leggi()
+
+myDipartimento.stampaModelli()
+
+myDipartimento.ricerca("Quadrato").modifica()
+myDipartimento.stampaModelli()
