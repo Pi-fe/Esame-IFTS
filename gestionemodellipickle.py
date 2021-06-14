@@ -34,8 +34,9 @@ class Dipartimento():
         print("Il modello è stato inserito con successo!")
 
     def cancellazione(self, modello):
-        self.listaModelli.remove(modello)
-        print("Il modello è stato cancellato con successo!")
+        if modello in self.listaModelli:
+            self.listaModelli.remove(modello)
+            print("Il modello è stato cancellato con successo!")
 
     def ricerca(self, nome):
         for modello in self.listaModelli:
